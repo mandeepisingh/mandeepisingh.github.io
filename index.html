@@ -54,6 +54,7 @@
 			var i = 0;
 			var xmlData = document.createElement("results");
 
+
 			function createFileToDowload(data){
 				let xml = `data:application/xml,<?xml version="1.0" encoding="UTF-8"?>${encodeURIComponent(data.outerHTML)}`;			  
 				let a = document.createElement("a");
@@ -96,11 +97,13 @@
 				var allText = $("#urls-textarea").val();
 				var urls = allText.split('\n');
 				$("#output").empty();
+				var devicetype = $('input[name=devicetype]:checked').val();
+				console.log("device type: " + devicetype);
 				for(i = 0; i< urls.length; i++){
 					var page = urls[i];
 					if(page){
 						$.ajax({
-					        url:'https://www.googleapis.com/pagespeedonline/v4/runPagespeed?strategy=desktop&url=' + page +'&amp;callback=runPagespeedCallbacks&key=AIzaSyDJmrgsAgl2FbFwpsPwPK5K23kETUXZc80',
+					        url:'https://www.googleapis.com/pagespeedonline/v4/runPagespeed?strategy=' + devicetype + '&url=' + page +'&amp;callback=runPagespeedCallbacks&key=AIzaSyDJmrgsAgl2FbFwpsPwPK5K23kETUXZc80',
 					        async: true,
 					        complete: function (response) {
 					        	var result = JSON.parse(response.responseText);
@@ -315,16 +318,30 @@
 
 	<body>
 		<div class="container">
-			<div class="nav"><a href="mobile.html">Mobile</a></div>
-			<h1 class="page-title">Desktop Page Optimization Suggestions</h1>
+			<h1 class="page-title">Page Optimization Suggestions</h1>
 			<h2>Instructions</h2>
 			<ul>
-				<li><strong>Step 1. </strong> Enter URLs in the text box below. One URL per line. Formatted as: https://www.exampleurl.com</li>
-				<li><strong>Step 2. </strong> Press the Image button to get suggestions for image optimizations, JS button for JS optimization tips and CSS button for CSS optimization tips.</li>
-				<li><strong>Step 3. </strong> The page may take a few minutes to load. The results will appear below the text box.</li>
-				<li><strong>Step 4. </strong> Use the button at the very bottom of the page to download an XML results file.</li>
-				<li><strong>Step 5. </strong> Import the XML file into Excel for easier to understand results.</li>
+				<li><strong>Step 1. </strong> Select the mobile or desktop radio button.</li>
+				<li><strong>Step 2. </strong> Enter URLs in the text box below. One URL per line. Formatted as: https://www.exampleurl.com</li>
+				<li><strong>Step 3. </strong> Press the Image button to get suggestions for image optimizations, JS button for JS optimization tips and CSS button for CSS optimization tips.</li>
+				<li><strong>Step 4. </strong> The page may take a few minutes to load. The results will appear below the text box.</li>
+				<li><strong>Step 5. </strong> Use the button at the very bottom of the page to download an XML results file.</li>
+				<li><strong>Step 6. </strong> Import the XML file into Excel for easier to understand results.</li>
+			</ul>
 			<div class="buttons">
+				<fieldset>
+				    <legend>Get Results for Mobile or Desktop</legend>
+				    <div>
+				        <input type="radio" id="desktop" value="desktop" name="devicetype" checked />
+				        <label for="desktop">Desktop</label>
+				    </div>
+
+				    <div>
+				        <input type="radio" id="mobile" value="mobile" name="devicetype" />
+				        <label for="mobile">Mobile</label>
+				    </div>
+				</fieldset>
+
 				<h3>Enter URL's In This Text Area.</h3>
 				<textarea id="urls-textarea" rows="10" cols="150">
 				</textarea>
