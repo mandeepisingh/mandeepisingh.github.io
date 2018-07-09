@@ -116,27 +116,27 @@
 				for(i = 0; i< urls.length; i++){
 					var page = urls[i];
 					if(page){
+
 						$.ajax({
 					        url:'https://www.googleapis.com/pagespeedonline/v4/runPagespeed?strategy=' + devicetype + '&url=' + page +'&amp;callback=runPagespeedCallbacks&key=AIzaSyDJmrgsAgl2FbFwpsPwPK5K23kETUXZc80',
-					        async: true,
+					        async: false,
 					        complete: function (response) {
 					        	var result = JSON.parse(response.responseText);
-					            
+					            addPageTitle(page);
 					            if(type=="image"){
+					            	
 					            	displayImageOptimizationResults(result, page);
 					        	}
 
 					        	if(type=="css"){
+					        		
 					        		displayCSSResults(result, page);	
 					        	}
 
 					        	if(type=="js"){
+					        		
 					        		displayJSResults(result, page);	
 					        	}			
-											
-								if(i == urls.length){
-									createFileToDowload(xmlData);
-								}
 								
 					        },
 					        error: function () {
@@ -149,6 +149,7 @@
 				    	}); //end of ajax
 					}
 				}
+				createFileToDowload(xmlData);
 
 			}
 
@@ -181,15 +182,15 @@
 
 			}
 
-			function addPageTitle(page){
+			function addPageTitle(newPage){
 				var p = document.createElement("p");
 				p.setAttribute("class", "results-title");
-				p.innerHTML = page;
+				p.innerHTML = newPage;
 				document.getElementById("output").appendChild(p);
 			}
 
 			function displayImageOptimizationResults(result, page){
-			  addPageTitle(page);
+			  
 			  displayTopSuggestions(result);
 			  var results = [];
 			  if(result.formattedResults.ruleResults.OptimizeImages.urlBlocks !== undefined || result.formattedResults.ruleResults.OptimizeImages.urlBlocks != null){
@@ -216,7 +217,7 @@
 			}
 
 			function displayJSResults(result, page){
-				addPageTitle(page);
+				
 				displayTopSuggestions(result);
 			  var results = [];
 			  if(result.formattedResults.ruleResults.MinifyJavaScript.urlBlocks !== undefined || result.formattedResults.ruleResults.MinifyJavaScript.urlBlocks != null){
@@ -245,7 +246,7 @@
 			}
 			
 			function displayCSSResults(result, page){
-				addPageTitle(page);
+				
 				displayTopSuggestions(result);
 			  var results = [];
 			  if(result.formattedResults.ruleResults.MinifyCss.urlBlocks !== undefined || result.formattedResults.ruleResults.MinifyCss.urlBlocks != null){
